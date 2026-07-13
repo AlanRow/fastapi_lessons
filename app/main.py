@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -32,10 +32,12 @@ def find_user_by_id(userlist, id):
 def get_user_by_id(id):
     target_user = find_user_by_id(users, id)
     
-    if target_user is not None:
-        return target_user
+    if target_user is None:
+        raise HTTPException(status_code=404, detail="User is not found")
 
-@app.post("/users")
+    return target_user
+
+@app.post("/users", response_model=UserModel, status_code=201)
 def create_user(user: UserModel):
     user_dict = {
         "id": user.id,
@@ -45,12 +47,6 @@ def create_user(user: UserModel):
     
     return user_dict
 
-# Практика 1: юзер по id
-# Создайте в общем пространстве имен переменную users со списком пользователей
-# каждый пользователь, это словарь с двумя ключами: id и name
-# добавьте endpoint users/{id}, который вернет объект пользователя с
-# соответствующим id
-
-# Практика 2
-# Напишите на выбор любой из методов : 
-# Update (PUT) или Delete (DELETE)
+# Практика 1: ошибка при создании
+# Если при создании пользователя пользователь с таким id уже существует 
+#  Вернуть ошибку 400 с комментарием "User already exists"
