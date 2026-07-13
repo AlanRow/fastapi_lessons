@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 app = FastAPI()
 
@@ -21,7 +21,7 @@ class UserModel(BaseModel):
         description="User's name"
     )
     
-    @validator("name")
+    @field_validator("name")
     def check_name_not_empty(self, v):
         if not v.strip():
             raise ValueError("Name must contain something")
@@ -69,3 +69,7 @@ def create_user(user: UserModel):
 # - не больше 30 символов
 # - хотя бы один символ верхнего регистра, один - нижнего
 #   и одна цифра
+
+# ПРИМЕЧАНИЕ: для проверки регистра символа / строки
+# можно использовать методы .isupper() / .islower()
+#  для проверки на цифры - .isdigit()
