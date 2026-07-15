@@ -14,6 +14,7 @@ app = FastAPI()
 
 class UserModel(BaseModel):
     id: str
+    age: int = 20
     name: str = Field(
         "Nobody",
         min_length=3,
