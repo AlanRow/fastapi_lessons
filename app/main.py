@@ -1,5 +1,8 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field, field_validator, model_validator
+
 
 app = FastAPI()
 
@@ -86,6 +89,19 @@ def find_user_by_id(userlist, id):
         if user["id"] == id:
             return user
 
+# HTML Templates
+templates = Jinja2Templates(directory="app/templates")
+
+name = "Gleb"
+
+@app.get("/", response_class=HTMLResponse)
+async def hello_world(request: Request):
+    return templates.TemplateResponse(request, "index.html", {
+        "request": request,
+        "name": name,
+    })
+    
+# API
 @app.get("/users")
 def filter_users(limit: int = 5, page: int = 1):
     first_index = limit * (page - 1)
@@ -119,4 +135,11 @@ def create_user(user: UserModel):
 
 # ПРИМЕЧАНИЕ: для поиска по тексту используйте 
 # синтаксис Python: search in name
+
+
+# Практика 2: число юзеров
+# Создать страницу /users_count
+# Вывести на ней надпись
+# "Сейчас зарегистрировано N пользователей"
+# N - длина списка users
 
