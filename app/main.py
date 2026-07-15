@@ -46,6 +46,38 @@ users = [
     {
         "id": "10",
         "name": "Gleb"
+    },
+    {
+        "id": "20",
+        "name": "Gleb"
+    },
+    {
+        "id": "30",
+        "name": "Gleb"
+    },
+    {
+        "id": "40",
+        "name": "Gleb"
+    },
+    {
+        "id": "50",
+        "name": "Gleb"
+    },
+    {
+        "id": "60",
+        "name": "Gleb"
+    },
+    {
+        "id": "70",
+        "name": "Gleb"
+    },
+    {
+        "id": "80",
+        "name": "Gleb"
+    },
+    {
+        "id": "90",
+        "name": "Gleb"
     }
 ]
 
@@ -53,6 +85,12 @@ def find_user_by_id(userlist, id):
     for user in userlist:
         if user["id"] == id:
             return user
+
+@app.get("/users")
+def filter_users(limit: int = 5, page: int = 1):
+    first_index = limit * (page - 1)
+    last_index = limit * page
+    return users[first_index:last_index]
 
 @app.get("/users/{id}")
 def get_user_by_id(id):
@@ -74,17 +112,11 @@ def create_user(user: UserModel):
     users.append(user_data)
     return user_data
 
-# Практика 1: ошибка при создании
-# Если при создании пользователя пользователь с таким id уже существует 
-#  Вернуть ошибку 400 с комментарием "User already exists"
+# Практика 1: Реализуйте фильтрацию пользователей
+# по имени - должны вернуться по запросы только
+# пользователи, чье имя содержит текст, отправленный
+# в query-параметре search
 
-# Практика 2: пароль
-# Добавьте поле password со следующими ограничениями:
-# - не меньше 8 символов
-# - не больше 30 символов
-# - хотя бы один символ верхнего регистра, один - нижнего
-#   и одна цифра
+# ПРИМЕЧАНИЕ: для поиска по тексту используйте 
+# синтаксис Python: search in name
 
-# ПРИМЕЧАНИЕ: для проверки регистра символа / строки
-# можно использовать методы .isupper() / .islower()
-#  для проверки на цифры - .isdigit()
