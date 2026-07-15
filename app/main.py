@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 app = FastAPI()
 
@@ -20,12 +20,26 @@ class UserModel(BaseModel):
         max_length=20,
         description="User's name"
     )
+    surname: str = Field(
+        "Nobody",
+        min_length=3,
+        max_length=20,
+        description="User's name"
+    )
     
     @field_validator("name")
-    def check_name_not_empty(self, v):
+    @classmethod
+    def check_name_not_empty(cls, v):
         if not v.strip():
             raise ValueError("Name must contain something")
         return v
+    
+    @model_validator(mode="after")
+    def check_fullname_length(self):
+        if len(self.name) + len(self.surname) > 50:
+            raise ValueError("Full name must have 50 characters or lesser")
+        return self
+    
 
 users = [
     {
