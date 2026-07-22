@@ -52,36 +52,20 @@ users = [
     },
     {
         "id": "20",
-        "name": "Gleb"
+        "name": "Alex"
     },
     {
         "id": "30",
-        "name": "Gleb"
+        "name": "Tanja"
     },
     {
         "id": "40",
-        "name": "Gleb"
+        "name": "Peter"
     },
     {
         "id": "50",
-        "name": "Gleb"
+        "name": "Nikolay"
     },
-    {
-        "id": "60",
-        "name": "Gleb"
-    },
-    {
-        "id": "70",
-        "name": "Gleb"
-    },
-    {
-        "id": "80",
-        "name": "Gleb"
-    },
-    {
-        "id": "90",
-        "name": "Gleb"
-    }
 ]
 
 def find_user_by_id(userlist, id):
@@ -92,13 +76,14 @@ def find_user_by_id(userlist, id):
 # HTML Templates
 templates = Jinja2Templates(directory="app/templates")
 
-name = "Gleb"
-
-@app.get("/", response_class=HTMLResponse)
-async def hello_world(request: Request):
+@app.get("/user/{id}", response_class=HTMLResponse)
+async def hello_world(request: Request, id):
+    user = find_user_by_id(users, id)
+    
     return templates.TemplateResponse(request, "index.html", {
         "request": request,
-        "name": name,
+        "user": user,
+        "message": f'User with ID <{id}> is not found'
     })
     
 # API

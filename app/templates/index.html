@@ -4,6 +4,12 @@
         <title>Hello World!</title>
     </head>
     <body>
-        <h1>Hello, {{ name }}</h1>
+        {% if user %}
+            <h1>Hello, {{ user["name"] }}</h1>
+        {% elif message %}
+            <h1>{{ message }}</h1>
+        {% else %}
+            <h1>User not found</h1>
+        {% endif %}
     </body>
 </html>
