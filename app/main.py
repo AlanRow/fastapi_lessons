@@ -102,13 +102,13 @@ async def hello_world(request: Request):
     })
     
 # API
-@app.get("/users")
+@app.get("/api/users")
 def filter_users(limit: int = 5, page: int = 1):
     first_index = limit * (page - 1)
     last_index = limit * page
     return users[first_index:last_index]
 
-@app.get("/users/{id}")
+@app.get("/api/users/{id}")
 def get_user_by_id(id):
     target_user = find_user_by_id(users, id)
     
@@ -117,7 +117,7 @@ def get_user_by_id(id):
 
     return target_user
 
-@app.post("/users", response_model=UserModel, status_code=201)
+@app.post("/api/users", response_model=UserModel, status_code=201)
 def create_user(user: UserModel):
     user_data = user.dict()
     
