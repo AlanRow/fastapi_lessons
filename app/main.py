@@ -68,6 +68,11 @@ users = [
     },
 ]
 
+friends = {
+    "Gleb": ["Alex", "Peter"],
+    "Tanja": ["Nikolay"]
+}
+
 def find_user_by_id(userlist, id):
     for user in userlist:
         if user["id"] == id:
@@ -76,8 +81,21 @@ def find_user_by_id(userlist, id):
 # HTML Templates
 templates = Jinja2Templates(directory="app/templates")
 
+
+@app.get("/users", response_class=HTMLResponse)
+async def get_user_list_html(request: Request):
+     return templates.TemplateResponse(
+         request,
+         "users.html",
+         {
+             "request": request,
+             "users": users,
+             "friends": friends
+         }
+    )
+
 @app.get("/user/{id}", response_class=HTMLResponse)
-async def hello_world(request: Request, id):
+async def hello_user(request: Request, id):
     user = find_user_by_id(users, id)
     
     return templates.TemplateResponse(request, "index.html", {
